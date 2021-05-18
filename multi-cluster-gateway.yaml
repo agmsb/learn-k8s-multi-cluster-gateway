@@ -1,0 +1,18 @@
+# We still utilize the Gateway resource
+kind: Gateway
+apiVersion: networking.x-k8s.io/v1alpha1
+metadata:
+  name: multi-cluster-gateway-ilb
+  namespace: foo
+spec:
+  # We now utilize a multi-cluster GatewayClass
+  gatewayClassName: gke-l7-rilb-mc
+  listeners:  
+  - protocol: HTTP
+    port: 80
+    routes:
+      # With this GatewayClass, we can match HTTPRoutes across GKE clusters 
+      kind: HTTPRoute
+      selector:
+        matchLabels:
+          gateway: multi-cluster-gateway-ilb
